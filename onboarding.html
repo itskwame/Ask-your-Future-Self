@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syncing with Future You</title>
+    <link rel="stylesheet" href="css/onboarding.css">
+</head>
+<body>
+    <div class="onboarding-container">
+        <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+        <div class="onboarding-content">
+            <div class="step active" data-step="0">
+                <h1>We've opened a secure channel.</h1>
+                <p>You're about to speak with the most powerful version of you — the one who already made it.</p>
+                <button onclick="nextStep()">Begin Calibration</button>
+            </div>
+
+            <div class="step" data-step="1">
+                <h2>What's your first name?</h2>
+                <input type="text" id="user-name" placeholder="Your name">
+                <button onclick="saveName()">Continue</button>
+            </div>
+
+            <div class="step" data-step="2">
+                <h2>What are your top 1-3 goals for the next 12 months?</h2>
+                <textarea id="user-goals" rows="5" placeholder="Your goals..."></textarea>
+                <button onclick="saveGoals()">Continue</button>
+            </div>
+
+            <div class="step" data-step="3">
+                <h2>Why are these goals important to you?</h2>
+                <textarea id="goals-importance" rows="5"></textarea>
+                <button onclick="saveImportance()">Continue</button>
+            </div>
+
+            <div class="step" data-step="4">
+                <h2>What do you hope will change once you've reached them?</h2>
+                <textarea id="desired-changes" rows="5"></textarea>
+                <button onclick="saveChanges()">Continue</button>
+            </div>
+
+            <div class="step" data-step="5">
+                <h2>What's making you want this now — not later?</h2>
+                <textarea id="motivation-now" rows="5"></textarea>
+                <button onclick="saveMotivation()">Continue</button>
+            </div>
+
+            <div class="step" data-step="6">
+                <h2>What's at stake if you don't follow through?</h2>
+                <textarea id="stakes" rows="5"></textarea>
+                <button onclick="saveStakes()">Continue</button>
+            </div>
+
+            <div class="step" data-step="7">
+                <h2>How would you describe your current situation?</h2>
+                <textarea id="current-situation" rows="5"></textarea>
+                <button onclick="saveSituation()">Continue</button>
+            </div>
+
+            <div class="step" data-step="8">
+                <h1>Great. The connection is complete.</h1>
+                <p>You're now speaking with Future <span id="display-name"></span> — the version of you that figured it all out.</p>
+                <button onclick="completeOnboarding()">Enter the Portal</button>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="js/onboarding.js"></script>
+</body>
+</html>

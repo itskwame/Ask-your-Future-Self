@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="css/chat.css">
+    <style>
+        .profile-container { max-width: 700px; margin: 2rem auto; padding: 2rem; }
+        .profile-card { background: white; padding: 3rem 2rem; border-radius: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); text-align: center; margin-bottom: 2rem; }
+        .avatar { width: 100px; height: 100px; background: linear-gradient(135deg, #6b46c1, #1a365d); border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 3rem; color: white; margin-bottom: 1rem; }
+        .trial-card { background: linear-gradient(135deg, #f6ad55, #ed8936); color: white; padding: 2rem; border-radius: 1rem; text-align: center; margin-bottom: 2rem; }
+        .settings-card { background: white; padding: 2rem; border-radius: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 2rem; }
+        .setting-item { display: flex; justify-content: space-between; padding: 1rem; background: #f7fafc; margin-bottom: 0.5rem; border-radius: 0.5rem; }
+        button { padding: 0.75rem 1.5rem; background: #6b46c1; color: white; border: none; border-radius: 0.5rem; cursor: pointer; }
+        .danger { background: #e53e3e; }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-brand">✨ Future You</div>
+        <div class="nav-links">
+            <a href="/chat.html">Chat</a>
+            <a href="/plan.html">My Plan</a>
+            <a href="/progress.html">Progress</a>
+            <a href="/profile.html" class="active">Profile</a>
+        </div>
+    </nav>
+
+    <div class="profile-container">
+        <div class="profile-card">
+            <div class="avatar">👤</div>
+            <h1 id="profile-name">Loading...</h1>
+            <p id="profile-email" style="color: #718096;"></p>
+        </div>
+
+        <div class="trial-card" id="trial-card">
+            <h2>⏰ Free Trial</h2>
+            <p id="trial-status">Loading...</p>
+            <div id="trial-days" style="font-size: 2.5rem; font-weight: 700; margin-top: 0.5rem;"></div>
+        </div>
+
+        <div class="settings-card">
+            <h2 style="margin-bottom: 1rem;">Account Settings</h2>
+            <div class="setting-item">
+                <div>
+                    <div style="font-size: 0.875rem; color: #718096;">NAME</div>
+                    <div id="name-value" style="font-weight: 600;">Loading...</div>
+                </div>
+                <button onclick="editName()">Edit</button>
+            </div>
+            <div class="setting-item">
+                <div>
+                    <div style="font-size: 0.875rem; color: #718096;">EMAIL</div>
+                    <div id="email-value" style="font-weight: 600;">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <button class="danger" style="width: 100%;" onclick="signOut()">Sign Out</button>
+    </div>
+
+    <script type="module" src="js/profile.js"></script>
+</body>
+</html>

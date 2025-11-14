@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Future You</title>
+    <link rel="stylesheet" href="css/chat.css">
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-brand">✨ Future You</div>
+        <div class="nav-links">
+            <a href="/chat.html" class="active">Chat</a>
+            <a href="/plan.html">My Plan</a>
+            <a href="/progress.html">Progress</a>
+            <a href="/profile.html">Profile</a>
+        </div>
+    </nav>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2>🔮 Future <span id="user-name">You</span></h2>
+            <p>Ready to guide you</p>
+        </div>
+
+        <div class="messages" id="messages">
+            <div class="message bot">
+                <div class="bubble">
+                    Hey there. I remember this moment. You weren't sure if you could stick with it. But you just made one of the best decisions of your life. Let's get to work.
+                </div>
+            </div>
+        </div>
+
+        <div class="input-container">
+            <textarea id="input" placeholder="Ask Future You anything..." rows="1"></textarea>
+            <button id="send" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script type="module" src="js/chat.js"></script>
+</body>
+</html>

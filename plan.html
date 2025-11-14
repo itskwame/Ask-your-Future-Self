@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Plan</title>
+    <link rel="stylesheet" href="css/chat.css">
+    <style>
+        .plan-container { max-width: 900px; margin: 2rem auto; padding: 2rem; }
+        .plan-section { background: white; padding: 2rem; margin-bottom: 2rem; border-radius: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .plan-section h2 { margin-bottom: 1rem; }
+        textarea { width: 100%; padding: 1rem; border: 2px solid #e2e8f0; border-radius: 0.5rem; margin-bottom: 1rem; }
+        button { padding: 0.75rem 1.5rem; background: #6b46c1; color: white; border: none; border-radius: 0.5rem; cursor: pointer; }
+        .habit-item { padding: 0.75rem; background: #f7fafc; margin-bottom: 0.5rem; border-radius: 0.5rem; display: flex; gap: 1rem; }
+    </style>
+</head>
+<body>
+    <nav class="nav">
+        <div class="nav-brand">✨ Future You</div>
+        <div class="nav-links">
+            <a href="/chat.html">Chat</a>
+            <a href="/plan.html" class="active">My Plan</a>
+            <a href="/progress.html">Progress</a>
+            <a href="/profile.html">Profile</a>
+        </div>
+    </nav>
+
+    <div class="plan-container">
+        <h1>Your Action Plan</h1>
+        <p style="color: #718096; margin-bottom: 2rem;">Co-created with Future You</p>
+
+        <div class="plan-section">
+            <h2>🧭 Vision</h2>
+            <textarea id="vision" rows="3" placeholder="Your North Star vision..."></textarea>
+            <button onclick="savePlan()">Save</button>
+        </div>
+
+        <div class="plan-section">
+            <h2>🎯 90-Day Goal</h2>
+            <textarea id="goal" rows="2" placeholder="What do you want to achieve in 90 days?"></textarea>
+            <button onclick="savePlan()">Save</button>
+        </div>
+
+        <div class="plan-section">
+            <h2>✅ Daily Habits</h2>
+            <div id="habits-list"></div>
+            <input type="text" id="new-habit" placeholder="Add a habit..." style="padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 0.5rem; width: 100%; margin-bottom: 0.5rem;">
+            <button onclick="addHabit()">Add Habit</button>
+        </div>
+    </div>
+
+    <script type="module" src="js/plan.js"></script>
+</body>
+</html>
