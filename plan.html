@@ -3,15 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Plan</title>
+    <title>My Plans</title>
     <link rel="stylesheet" href="css/chat.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
     <style>
-        .plan-container { max-width: 900px; margin: 2rem auto; padding: 2rem; }
-        .plan-section { background: white; padding: 2rem; margin-bottom: 2rem; border-radius: 1rem; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-        .plan-section h2 { margin-bottom: 1rem; }
-        textarea { width: 100%; padding: 1rem; border: 2px solid #e2e8f0; border-radius: 0.5rem; margin-bottom: 1rem; }
-        button { padding: 0.75rem 1.5rem; background: #6b46c1; color: white; border: none; border-radius: 0.5rem; cursor: pointer; }
-        .habit-item { padding: 0.75rem; background: #f7fafc; margin-bottom: 0.5rem; border-radius: 0.5rem; display: flex; gap: 1rem; }
+        .plans-container { max-width: 1200px; margin: 2rem auto; padding: 2rem; }
+        .plans-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .plans-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .plan-card { background: white; padding: 1.5rem; border-radius: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); cursor: pointer; transition: all 0.3s; border: 2px solid transparent; }
+        .plan-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); transform: translateY(-2px); border-color: #667eea; }
+        .plan-card.active { border-color: #667eea; background: #f7faff; }
+        .plan-card h3 { margin-bottom: 0.5rem; color: #2d3748; }
+        .plan-card .goal-category { font-size: 0.875rem; color: #718096; margin-bottom: 0.5rem; }
+        .plan-card .progress-bar { height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; margin-top: 1rem; }
+        .plan-card .progress-fill { height: 100%; background: linear-gradient(90deg, #667eea, #764ba2); transition: width 0.3s; }
+        .add-plan-card { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 200px; }
+        .add-plan-card i { font-size: 3rem; margin-bottom: 1rem; }
+        .plan-detail { display: none; background: white; padding: 2rem; border-radius: 1rem; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .plan-detail.active { display: block; }
+        .plan-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+        .plan-section { background: #f7fafc; padding: 1.5rem; border-radius: 0.75rem; }
+        .plan-section h3 { margin-bottom: 1rem; color: #2d3748; }
+        .steps-list { list-style: none; padding: 0; }
+        .step-item { background: white; padding: 1rem; margin-bottom: 0.75rem; border-radius: 0.5rem; display: flex; align-items: center; gap: 1rem; border-left: 4px solid #e2e8f0; }
+        .step-item.current { border-left-color: #667eea; background: #f7faff; }
+        .step-item.completed { border-left-color: #48bb78; opacity: 0.7; }
+        .step-number { width: 32px; height: 32px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.875rem; }
+        .step-item.current .step-number { background: #667eea; color: white; }
+        .step-item.completed .step-number { background: #48bb78; color: white; }
+        .chat-section { grid-column: 1 / -1; background: white; padding: 1.5rem; border-radius: 0.75rem; border: 2px solid #e2e8f0; }
+        .chat-messages { max-height: 400px; overflow-y: auto; margin-bottom: 1rem; padding: 1rem; background: #f7fafc; border-radius: 0.5rem; }
+        .chat-input-container { display: flex; gap: 0.5rem; }
+        .chat-input-container input { flex: 1; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 0.5rem; }
+        .chat-input-container button { padding: 0.75rem 1.5rem; background: #667eea; color: white; border: none; border-radius: 0.5rem; cursor: pointer; font-weight: 600; }
+        .modal { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); align-items: center; justify-content: center; z-index: 1000; }
+        .modal.active { display: flex; }
+        .modal-content { background: white; padding: 2rem; border-radius: 1rem; max-width: 600px; width: 90%; max-height: 80vh; overflow-y: auto; }
+        .modal-content h2 { margin-bottom: 1.5rem; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; color: #2d3748; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 0.5rem; }
+        .btn-primary { padding: 0.75rem 1.5rem; background: #667eea; color: white; border: none; border-radius: 0.5rem; cursor: pointer; font-weight: 600; width: 100%; }
+        .btn-secondary { padding: 0.75rem 1.5rem; background: #e2e8f0; color: #2d3748; border: none; border-radius: 0.5rem; cursor: pointer; font-weight: 600; margin-top: 0.5rem; width: 100%; }
+        .empty-state { text-align: center; padding: 4rem 2rem; color: #718096; }
+        .empty-state i { font-size: 4rem; margin-bottom: 1rem; color: #cbd5e0; }
+        .plan-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+        .btn-small { padding: 0.5rem 1rem; background: #e2e8f0; color: #2d3748; border: none; border-radius: 0.5rem; cursor: pointer; font-size: 0.875rem; }
     </style>
 </head>
 <body>
@@ -19,33 +56,59 @@
         <div class="nav-brand">✨ Future You</div>
         <div class="nav-links">
             <a href="/chat.html">Chat</a>
-            <a href="/plan.html" class="active">My Plan</a>
+            <a href="/plan.html" class="active">My Plans</a>
             <a href="/progress.html">Progress</a>
             <a href="/profile.html">Profile</a>
         </div>
     </nav>
 
-    <div class="plan-container">
-        <h1>Your Action Plan</h1>
-        <p style="color: #718096; margin-bottom: 2rem;">Co-created with Future You</p>
-
-        <div class="plan-section">
-            <h2>🧭 Vision</h2>
-            <textarea id="vision" rows="3" placeholder="Your North Star vision..."></textarea>
-            <button onclick="savePlan()">Save</button>
+    <div class="plans-container">
+        <div class="plans-header">
+            <div>
+                <h1>Your Action Plans</h1>
+                <p style="color: #718096;">Co-created with Future You</p>
+            </div>
+            <button class="btn-primary" onclick="openCreatePlanModal()" style="width: auto;">
+                <i class="fas fa-plus"></i> Create New Plan
+            </button>
         </div>
 
-        <div class="plan-section">
-            <h2>🎯 90-Day Goal</h2>
-            <textarea id="goal" rows="2" placeholder="What do you want to achieve in 90 days?"></textarea>
-            <button onclick="savePlan()">Save</button>
-        </div>
+        <div id="plans-list" class="plans-grid"></div>
+        <div id="plan-detail" class="plan-detail"></div>
+    </div>
 
-        <div class="plan-section">
-            <h2>✅ Daily Habits</h2>
-            <div id="habits-list"></div>
-            <input type="text" id="new-habit" placeholder="Add a habit..." style="padding: 0.75rem; border: 2px solid #e2e8f0; border-radius: 0.5rem; width: 100%; margin-bottom: 0.5rem;">
-            <button onclick="addHabit()">Add Habit</button>
+    <div id="create-plan-modal" class="modal">
+        <div class="modal-content">
+            <h2>Create Your Action Plan</h2>
+            <form id="create-plan-form" onsubmit="createPlan(event)">
+                <div class="form-group">
+                    <label>What goal do you want to accomplish?</label>
+                    <input type="text" id="goal-title" required placeholder="e.g., Start my own business">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select id="goal-category" required>
+                        <option value="">Select a category</option>
+                        <option value="Career">Career</option>
+                        <option value="Health">Health & Fitness</option>
+                        <option value="Relationships">Relationships</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Personal Growth">Personal Growth</option>
+                        <option value="Creative">Creative Projects</option>
+                        <option value="Other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Your Vision (What does success look like?)</label>
+                    <textarea id="vision" rows="3" required placeholder="Describe your ideal outcome..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>90-Day Goal (What's your immediate target?)</label>
+                    <textarea id="goal-90-day" rows="2" required placeholder="What do you want to achieve in 90 days?"></textarea>
+                </div>
+                <button type="submit" class="btn-primary">Create Plan</button>
+                <button type="button" class="btn-secondary" onclick="closeCreatePlanModal()">Cancel</button>
+            </form>
         </div>
     </div>
 

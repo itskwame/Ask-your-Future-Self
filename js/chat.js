@@ -7,6 +7,8 @@ const supabase = createClient(
 
 let userId = null;
 let userName = '';
+let userMessageCount = 0;
+let hasSeenPlanPrompt = false;
 
 (async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -42,8 +44,17 @@ async function loadMessages() {
         document.getElementById('messages').innerHTML = '';
         messages.forEach(msg => {
             addMessage(msg.message, msg.role === 'user' ? 'user' : 'bot', false);
+            if (msg.role === 'user') userMessageCount++;
         });
     }
+
+    const { data: plans } = await supabase
+        .from('plans')
+        .select('id')
+        .eq('user_id', userId)
+        .limit(1);
+
+    hasSeenPlanPrompt = plans && plans.length > 0;
 }
 
 function addMessage(text, type, save = true) {
@@ -75,6 +86,7 @@ window.sendMessage = async function() {
 
     input.value = '';
     addMessage(message, 'user');
+    userMessageCount++;
 
     setTimeout(() => {
         const responses = [
@@ -88,8 +100,30 @@ window.sendMessage = async function() {
 
         const response = responses[Math.floor(Math.random() * responses.length)];
         addMessage(response, 'bot');
+
+        if (userMessageCount >= 5 && !hasSeenPlanPrompt) {
+            setTimeout(() => {
+                showPlanPrompt();
+            }, 1500);
+        }
     }, 1000);
 };
+
+function showPlanPrompt() {
+    hasSeenPlanPrompt = true;
+    const messagesDiv = document.getElementById('messages');
+    const promptDiv = document.createElement('div');
+    promptDiv.className = 'message bot plan-prompt';
+    promptDiv.innerHTML = `
+        <div class="bubble" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem;">
+            <p style="margin-bottom: 1rem; font-weight: 600;">I can see you're serious about making progress. Let's turn these conversations into action.</p>
+            <p style="margin-bottom: 1rem;">Want to create a personalized plan to help you reach your goals?</p>
+            <button onclick="window.location.href='/plan.html?create=true'" style="background: white; color: #667eea; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 0.5rem;">Let's Create Your Action Plan</button>
+        </div>
+    `;
+    messagesDiv.appendChild(promptDiv);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+}
 
 document.getElementById('input').addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
