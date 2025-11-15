@@ -15,7 +15,7 @@ let contextData = {};
 (async () => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
-        window.location.href = '/auth.html';
+        window.location.href = 'auth.html';
         return;
     }
 

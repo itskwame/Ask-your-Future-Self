@@ -11,7 +11,7 @@ let userProfile = null;
 (async () => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
-        window.location.href = '/auth.html';
+        window.location.href = 'auth.html';
         return;
     }
 
@@ -63,6 +63,6 @@ window.editName = async function() {
 window.signOut = async function() {
     if (confirm('Are you sure you want to sign out?')) {
         await supabase.auth.signOut();
-        window.location.href = '/index.html';
+        window.location.href = 'index.html';
     }
 };

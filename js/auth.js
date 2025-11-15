@@ -64,9 +64,9 @@ document.getElementById('signin-form').addEventListener('submit', async (e) => {
                 .maybeSingle();
 
             if (calibration?.completed_at) {
-                window.location.href = '/chat.html';
+                window.location.href = 'chat.html';
             } else {
-                window.location.href = '/onboarding.html';
+                window.location.href = 'onboarding.html';
             }
         }
     } catch (error) {
@@ -112,7 +112,7 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
             await supabase.from('user_profiles').insert([profileData]);
             await supabase.from('calibration_data').insert([{ user_id: data.user.id }]);
 
-            window.location.href = '/onboarding.html';
+            window.location.href = 'onboarding.html';
         }
     } catch (error) {
         errorDiv.textContent = error.message;
@@ -125,6 +125,6 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
 (async () => {
     const { data: { session } } = await supabase.auth.getSession();
     if (session) {
-        window.location.href = '/chat.html';
+        window.location.href = 'chat.html';
     }
 })();

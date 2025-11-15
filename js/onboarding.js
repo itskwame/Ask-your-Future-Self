@@ -14,7 +14,7 @@ let userName = '';
 (async () => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
-        window.location.href = '/auth.html';
+        window.location.href = 'auth.html';
         return;
     }
     userId = session.user.id;
@@ -26,7 +26,7 @@ let userName = '';
         .maybeSingle();
 
     if (calibration?.completed_at) {
-        window.location.href = '/chat.html';
+        window.location.href = 'chat.html';
     }
 })();
 
@@ -107,5 +107,5 @@ window.completeOnboarding = async function() {
         completed_at: new Date().toISOString()
     }).eq('user_id', userId);
 
-    window.location.href = '/chat.html';
+    window.location.href = 'chat.html';
 };

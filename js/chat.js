@@ -13,7 +13,7 @@ let hasSeenPlanPrompt = false;
 (async () => {
     const { data: { session } } = await supabase.auth.getSession();
     if (!session) {
-        window.location.href = '/auth.html';
+        window.location.href = 'auth.html';
         return;
     }
 
@@ -131,7 +131,7 @@ function showPlanPrompt() {
         <div class="bubble" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 1.5rem;">
             <p style="margin-bottom: 1rem; font-weight: 600;">I can see you're serious about making progress. Let's turn these conversations into action.</p>
             <p style="margin-bottom: 1rem;">Want to create a personalized plan to help you reach your goals?</p>
-            <button onclick="window.location.href='/plan.html?create=true'" style="background: white; color: #667eea; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 0.5rem;">Let's Create Your Action Plan</button>
+            <button onclick="window.location.href='plan.html?create=true'" style="background: white; color: #667eea; padding: 0.75rem 1.5rem; border: none; border-radius: 0.5rem; font-weight: 600; cursor: pointer; width: 100%; margin-top: 0.5rem;">Let's Create Your Action Plan</button>
         </div>
     `;
     messagesDiv.appendChild(promptDiv);
