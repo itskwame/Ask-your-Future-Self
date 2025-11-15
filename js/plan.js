@@ -1,10 +1,8 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 import { getQuestionsForCategory } from './context-questions.js';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from './config.js';
 
-const supabase = createClient(
-    import.meta.env.VITE_SUPABASE_URL,
-    import.meta.env.VITE_SUPABASE_ANON_KEY
-);
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 let userId = null;
 let currentPlan = null;
@@ -311,7 +309,7 @@ window.sendPlanMessage = async function() {
 
     try {
         const { data: { session } } = await supabase.auth.getSession();
-        const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/deepseek-chat`;
+        const apiUrl = `${SUPABASE_URL}/functions/v1/deepseek-chat`;
 
         const response = await fetch(apiUrl, {
             method: 'POST',
