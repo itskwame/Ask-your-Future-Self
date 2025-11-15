@@ -247,36 +247,51 @@ window.sendPlanMessage = async function() {
     `;
     chatDiv.scrollTop = chatDiv.scrollHeight;
 
-    setTimeout(async () => {
-        const steps = Array.isArray(currentPlan.steps) ? currentPlan.steps : JSON.parse(currentPlan.steps || '[]');
-        const completedSteps = steps.filter(s => s.completed).length;
-        const totalSteps = steps.length;
-        const currentStepInfo = steps[currentPlan.current_step];
+    try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/deepseek-chat`;
 
-        const contextResponses = [
-            `Great question! You're on step ${currentPlan.current_step + 1} of ${totalSteps}: "${currentStepInfo?.title || 'your journey'}". Here's what I recommend: break it into smaller actions. What's one thing you can do today?`,
-            `I see you've completed ${completedSteps} out of ${totalSteps} steps - that's solid progress! ${completedSteps > 0 ? "Remember how good it felt to check those off? Let's keep that momentum going." : "The first step is always the hardest. But you're here, which means you're ready."}`,
-            `Looking at your goal "${currentPlan.goal_title}", I know exactly where you are right now. The version of me that achieved this remembers feeling exactly what you're feeling. Here's the truth: consistency beats intensity. Small daily actions compound.`,
-            `You're ${Math.round((completedSteps / totalSteps) * 100)}% through this plan. ${completedSteps < totalSteps / 2 ? "I know it feels slow, but trust me - the momentum builds. Every step makes the next one easier." : "You're over halfway there! This is where most people quit. But you're not most people, are you?"}`,
-            `Let me remind you why "${currentPlan.goal_title}" matters: ${currentPlan.vision}. When doubt creeps in, come back to this. This is your North Star.`
-        ];
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${session.access_token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: message,
+                context_type: 'plan',
+                plan_id: currentPlan.id
+            })
+        });
 
-        const response = contextResponses[Math.floor(Math.random() * contextResponses.length)];
+        if (!response.ok) {
+            throw new Error('Failed to get response');
+        }
+
+        const data = await response.json();
 
         await supabase.from('plan_conversations').insert([{
             plan_id: currentPlan.id,
             user_id: userId,
             role: 'future_self',
-            message: response
+            message: data.message
         }]);
 
         chatDiv.innerHTML += `
             <div class="message bot">
-                <div class="bubble">${response}</div>
+                <div class="bubble">${data.message}</div>
             </div>
         `;
         chatDiv.scrollTop = chatDiv.scrollHeight;
-    }, 1000);
+    } catch (error) {
+        console.error('Error:', error);
+        chatDiv.innerHTML += `
+            <div class="message bot">
+                <div class="bubble">I'm having trouble connecting right now. Please try again in a moment.</div>
+            </div>
+        `;
+        chatDiv.scrollTop = chatDiv.scrollHeight;
+    }
 };
 
 window.markStepComplete = async function(stepIndex) {

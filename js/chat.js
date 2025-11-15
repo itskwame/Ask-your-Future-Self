@@ -88,25 +88,38 @@ window.sendMessage = async function() {
     addMessage(message, 'user');
     userMessageCount++;
 
-    setTimeout(() => {
-        const responses = [
-            "I remember asking myself that exact question. Here's what I learned: trust the process, but don't wait for perfect clarity. Start moving.",
-            "You're closer than you think. The doubt you're feeling? That's growth pushing against comfort. Keep going.",
-            "I know it feels overwhelming right now. But remember why you started this. That version of you who set these goals knew something important.",
-            "Here's the truth: you already have what it takes. You just need to trust yourself more and second-guess yourself less.",
-            "That fear you're feeling? It's not a stop sign. It's a sign you're about to level up. I've been there.",
-            "Small wins matter more than you realize right now. Celebrate them. They add up to the breakthrough you're looking for."
-        ];
+    try {
+        const { data: { session } } = await supabase.auth.getSession();
+        const apiUrl = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/deepseek-chat`;
 
-        const response = responses[Math.floor(Math.random() * responses.length)];
-        addMessage(response, 'bot');
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${session.access_token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                message: message,
+                context_type: 'general'
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to get response');
+        }
+
+        const data = await response.json();
+        addMessage(data.message, 'bot');
 
         if (userMessageCount >= 5 && !hasSeenPlanPrompt) {
             setTimeout(() => {
                 showPlanPrompt();
             }, 1500);
         }
-    }, 1000);
+    } catch (error) {
+        console.error('Error:', error);
+        addMessage("I'm having trouble connecting right now. Please try again in a moment.", 'bot');
+    }
 };
 
 function showPlanPrompt() {
