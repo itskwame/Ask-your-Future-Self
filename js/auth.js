@@ -7,6 +7,7 @@ let isSignUp = false;
 
 document.getElementById('toggle-link').addEventListener('click', (e) => {
     e.preventDefault();
+    console.log('Toggle clicked, switching to:', !isSignUp ? 'Sign Up' : 'Sign In');
     isSignUp = !isSignUp;
 
     const signinForm = document.getElementById('signin-form');

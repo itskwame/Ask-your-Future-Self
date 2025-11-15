@@ -60,6 +60,20 @@ input:focus {
     border-color: #6b46c1;
 }
 
+select {
+    padding: 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 0.75rem;
+    font-size: 1rem;
+    background: white;
+    cursor: pointer;
+}
+
+select:focus {
+    outline: none;
+    border-color: #6b46c1;
+}
+
 button {
     padding: 1rem;
     background: linear-gradient(135deg, #f6ad55, #ed8936);
