@@ -1226,3 +1226,125 @@ h1, h2, h3, h4, h5, h6 {
         height: 150px;
     }
 }
+
+/* ===================================
+   FAQ PAGE STYLES
+   =================================== */
+.faq-hero {
+    padding: 8rem 0 4rem;
+    background: var(--gradient-hero);
+    color: white;
+    text-align: center;
+}
+
+.faq-section {
+    padding: var(--spacing-xl) 0;
+    background: var(--color-gray-50);
+}
+
+.faq-list {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.faq-item {
+    background: white;
+    border-radius: var(--radius-md);
+    margin-bottom: 1rem;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.faq-item:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.faq-question {
+    padding: 1.5rem 2rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+}
+
+.faq-question h3 {
+    margin: 0;
+    font-size: 1.125rem;
+    color: var(--color-gray-800);
+    font-weight: 600;
+    flex: 1;
+}
+
+.faq-question i {
+    color: var(--color-accent);
+    transition: transform 0.3s ease;
+    font-size: 1rem;
+}
+
+.faq-item.active .faq-question i {
+    transform: rotate(180deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.faq-item.active .faq-answer {
+    max-height: 1000px;
+    padding: 0 2rem 1.5rem;
+}
+
+.faq-answer p {
+    margin-bottom: 1rem;
+    color: var(--color-gray-700);
+    line-height: 1.8;
+}
+
+.faq-answer p:last-child {
+    margin-bottom: 0;
+}
+
+.faq-answer ul {
+    margin: 1rem 0;
+    padding-left: 1.5rem;
+}
+
+.faq-answer li {
+    margin-bottom: 0.5rem;
+    color: var(--color-gray-700);
+    line-height: 1.6;
+}
+
+.faq-answer strong {
+    color: var(--color-gray-800);
+    font-weight: 600;
+}
+
+.cta-section {
+    padding: var(--spacing-xl) 0;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .faq-hero {
+        padding: 6rem 0 3rem;
+    }
+
+    .faq-question {
+        padding: 1.25rem 1.5rem;
+    }
+
+    .faq-question h3 {
+        font-size: 1rem;
+        padding-right: 1rem;
+    }
+
+    .faq-item.active .faq-answer {
+        padding: 0 1.5rem 1.25rem;
+    }
+}
