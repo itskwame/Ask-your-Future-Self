@@ -82,6 +82,9 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
     const name = document.getElementById('signup-name').value;
     const email = document.getElementById('signup-email').value;
     const password = document.getElementById('signup-password').value;
+    const age = document.getElementById('signup-age').value;
+    const gender = document.getElementById('signup-gender').value;
+    const location = document.getElementById('signup-location').value;
     const button = e.target.querySelector('button');
     const errorDiv = document.getElementById('signup-error');
 
@@ -94,14 +97,19 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
         if (error) throw error;
 
         if (data.user) {
-            await supabase.from('user_profiles').insert([{
+            const profileData = {
                 id: data.user.id,
                 first_name: name,
                 trial_started_at: new Date().toISOString(),
                 trial_ends_at: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
                 is_premium: false
-            }]);
+            };
 
+            if (age) profileData.age = parseInt(age);
+            if (gender) profileData.gender = gender;
+            if (location) profileData.location = location;
+
+            await supabase.from('user_profiles').insert([profileData]);
             await supabase.from('calibration_data').insert([{ user_id: data.user.id }]);
 
             window.location.href = '/onboarding.html';

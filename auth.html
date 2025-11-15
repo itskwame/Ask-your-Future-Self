@@ -23,6 +23,15 @@
                 <input type="text" id="signup-name" placeholder="First Name" required>
                 <input type="email" id="signup-email" placeholder="Email" required>
                 <input type="password" id="signup-password" placeholder="Password" minlength="6" required>
+                <input type="number" id="signup-age" placeholder="Age (optional)" min="13" max="120">
+                <select id="signup-gender">
+                    <option value="">Gender (optional)</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="non-binary">Non-binary</option>
+                    <option value="prefer-not-to-say">Prefer not to say</option>
+                </select>
+                <input type="text" id="signup-location" placeholder="Location (optional, e.g., Los Angeles, CA)">
                 <button type="submit">Create Account</button>
                 <div class="error" id="signup-error"></div>
             </form>

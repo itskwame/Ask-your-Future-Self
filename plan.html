@@ -79,36 +79,45 @@
 
     <div id="create-plan-modal" class="modal">
         <div class="modal-content">
-            <h2>Create Your Action Plan</h2>
-            <form id="create-plan-form" onsubmit="createPlan(event)">
+            <div id="plan-step-1" class="plan-step active">
+                <h2>Let's Create Your Action Plan</h2>
+                <p style="color: #718096; margin-bottom: 2rem;">First, tell me what you want to achieve</p>
+
                 <div class="form-group">
                     <label>What goal do you want to accomplish?</label>
-                    <input type="text" id="goal-title" required placeholder="e.g., Start my own business">
+                    <input type="text" id="goal-title" placeholder="e.g., Start my own business">
                 </div>
                 <div class="form-group">
                     <label>Category</label>
-                    <select id="goal-category" required>
+                    <select id="goal-category" onchange="onCategoryChange()">
                         <option value="">Select a category</option>
-                        <option value="Career">Career</option>
-                        <option value="Health">Health & Fitness</option>
-                        <option value="Relationships">Relationships</option>
-                        <option value="Finance">Finance</option>
-                        <option value="Personal Growth">Personal Growth</option>
-                        <option value="Creative">Creative Projects</option>
-                        <option value="Other">Other</option>
+                        <option value="health">Health & Fitness</option>
+                        <option value="career">Career & Business</option>
+                        <option value="relationships">Relationships</option>
+                        <option value="finance">Finance & Money</option>
+                        <option value="personal_growth">Personal Growth</option>
+                        <option value="learning">Learning & Skills</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Your Vision (What does success look like?)</label>
-                    <textarea id="vision" rows="3" required placeholder="Describe your ideal outcome..."></textarea>
+                    <textarea id="vision" rows="3" placeholder="Describe your ideal outcome..."></textarea>
                 </div>
                 <div class="form-group">
                     <label>90-Day Goal (What's your immediate target?)</label>
-                    <textarea id="goal-90-day" rows="2" required placeholder="What do you want to achieve in 90 days?"></textarea>
+                    <textarea id="goal-90-day" rows="2" placeholder="What do you want to achieve in 90 days?"></textarea>
                 </div>
-                <button type="submit" class="btn-primary">Create Plan</button>
+                <button type="button" class="btn-primary" onclick="goToContextStep()">Next: Share More Context</button>
                 <button type="button" class="btn-secondary" onclick="closeCreatePlanModal()">Cancel</button>
-            </form>
+            </div>
+
+            <div id="plan-step-2" class="plan-step">
+                <h2>Help Me Understand Your Situation</h2>
+                <p style="color: #718096; margin-bottom: 2rem;">The more I know about where you are, the better I can guide you</p>
+                <div id="context-questions-container"></div>
+                <button type="button" class="btn-primary" onclick="createPlanWithContext()">Create My Plan</button>
+                <button type="button" class="btn-secondary" onclick="goBackToStep1()">Back</button>
+            </div>
         </div>
     </div>
 

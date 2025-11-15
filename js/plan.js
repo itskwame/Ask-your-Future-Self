@@ -1,4 +1,5 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+import { getQuestionsForCategory } from './context-questions.js';
 
 const supabase = createClient(
     import.meta.env.VITE_SUPABASE_URL,
@@ -8,6 +9,8 @@ const supabase = createClient(
 let userId = null;
 let currentPlan = null;
 let allPlans = [];
+let selectedCategory = '';
+let contextData = {};
 
 (async () => {
     const { data: { session } } = await supabase.auth.getSession();
@@ -191,29 +194,88 @@ async function renderPlanDetail(plan) {
 
 window.openCreatePlanModal = function() {
     document.getElementById('create-plan-modal').classList.add('active');
+    document.getElementById('plan-step-1').classList.add('active');
+    document.getElementById('plan-step-2').classList.remove('active');
+    contextData = {};
+    selectedCategory = '';
 };
 
 window.closeCreatePlanModal = function() {
     document.getElementById('create-plan-modal').classList.remove('active');
-    document.getElementById('create-plan-form').reset();
+    document.getElementById('goal-title').value = '';
+    document.getElementById('goal-category').value = '';
+    document.getElementById('vision').value = '';
+    document.getElementById('goal-90-day').value = '';
+    contextData = {};
+    selectedCategory = '';
 };
 
-window.createPlan = async function(event) {
-    event.preventDefault();
+window.onCategoryChange = function() {
+    selectedCategory = document.getElementById('goal-category').value;
+};
 
+window.goToContextStep = function() {
+    const goalTitle = document.getElementById('goal-title').value.trim();
+    const goalCategory = document.getElementById('goal-category').value;
+    const vision = document.getElementById('vision').value.trim();
+    const goal90Day = document.getElementById('goal-90-day').value.trim();
+
+    if (!goalTitle || !goalCategory || !vision || !goal90Day) {
+        alert('Please fill in all fields before continuing');
+        return;
+    }
+
+    const questions = getQuestionsForCategory(goalCategory);
+    const container = document.getElementById('context-questions-container');
+
+    container.innerHTML = questions.questions.map(q => `
+        <div class="form-group">
+            <label>${q.question}</label>
+            <textarea
+                id="context-${q.id}"
+                rows="3"
+                placeholder="${q.placeholder}"
+            ></textarea>
+            <small style="color: #718096; font-size: 0.875rem; margin-top: 0.25rem; display: block;">
+                ${q.hint}
+            </small>
+        </div>
+    `).join('');
+
+    document.getElementById('plan-step-1').classList.remove('active');
+    document.getElementById('plan-step-2').classList.add('active');
+};
+
+window.goBackToStep1 = function() {
+    document.getElementById('plan-step-2').classList.remove('active');
+    document.getElementById('plan-step-1').classList.add('active');
+};
+
+window.createPlanWithContext = async function() {
     const goalTitle = document.getElementById('goal-title').value;
     const goalCategory = document.getElementById('goal-category').value;
     const vision = document.getElementById('vision').value;
     const goal90Day = document.getElementById('goal-90-day').value;
+
+    const questions = getQuestionsForCategory(goalCategory);
+    const contextData = {};
+
+    questions.questions.forEach(q => {
+        const value = document.getElementById(`context-${q.id}`)?.value.trim();
+        if (value) {
+            contextData[q.id] = value;
+        }
+    });
 
     const { data: newPlan } = await supabase
         .from('plans')
         .insert([{
             user_id: userId,
             goal_title: goalTitle,
-            goal_category: goalCategory,
+            goal_category: questions.category,
             vision: vision,
             goal_90_day: goal90Day,
+            context_data: contextData,
             steps: JSON.stringify([]),
             current_step: 0,
             is_active: true
